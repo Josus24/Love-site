@@ -32,7 +32,6 @@
     transition: background 1s ease;
     -webkit-user-select: none;
     user-select: none;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   }
 
   body.morning { background: linear-gradient(135deg, #ffd8a8 0%, #ffb3c1 50%, #fecfef 100%); }
@@ -55,7 +54,6 @@
     90% { transform: translate(-1px, 1px); }
   }
 
-  /* Звёзды + полумесяц для ночного режима */
   #stars {
     position: fixed;
     inset: 0;
@@ -69,18 +67,17 @@
 
   .star {
     position: absolute;
-    background: #fff;
+    background: #ffffff;
     border-radius: 50%;
     animation: twinkle linear infinite;
-    box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+    will-change: opacity, transform;
   }
 
   @keyframes twinkle {
-    0%, 100% { opacity: 0.2; transform: scale(1); }
-    50%      { opacity: 1; transform: scale(1.3); }
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50%      { opacity: 1; transform: scale(1.4); }
   }
 
-  /* Полумесяц */
   .moon {
     position: absolute;
     top: 8vh;
@@ -89,24 +86,23 @@
     height: 100px;
     border-radius: 50%;
     box-shadow: -25px 10px 0 0 #fff8e7;
-    filter: drop-shadow(0 0 30px rgba(255, 248, 231, 0.7))
-            drop-shadow(0 0 60px rgba(255, 248, 231, 0.4));
+    filter: drop-shadow(0 0 25px rgba(255, 248, 231, 0.7))
+            drop-shadow(0 0 50px rgba(255, 248, 231, 0.4));
     animation: moonGlow 4s ease-in-out infinite;
     transform: rotate(-25deg);
   }
 
   @keyframes moonGlow {
     0%, 100% {
-      filter: drop-shadow(0 0 30px rgba(255, 248, 231, 0.7))
-              drop-shadow(0 0 60px rgba(255, 248, 231, 0.4));
+      filter: drop-shadow(0 0 25px rgba(255, 248, 231, 0.7))
+              drop-shadow(0 0 50px rgba(255, 248, 231, 0.4));
     }
     50% {
-      filter: drop-shadow(0 0 45px rgba(255, 248, 231, 0.95))
-              drop-shadow(0 0 90px rgba(255, 248, 231, 0.6));
+      filter: drop-shadow(0 0 40px rgba(255, 248, 231, 0.95))
+              drop-shadow(0 0 80px rgba(255, 248, 231, 0.6));
     }
   }
 
-  /* Экран загрузки — фон теперь наследует цвет body */
   #loader {
     position: fixed;
     inset: 0;
@@ -124,7 +120,7 @@
 
   #loader h2 {
     font-family: 'Pacifico', cursive;
-    font-size: 28px;
+    font-size: 32px;
     color: #fff;
     margin-bottom: 30px;
     text-align: center;
@@ -136,7 +132,7 @@
   }
 
   .progress-bar {
-    width: 260px;
+    width: 280px;
     max-width: 80vw;
     height: 10px;
     background: rgba(255, 255, 255, 0.35);
@@ -183,7 +179,7 @@
     100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
   }
 
-  /* Карточка */
+  /* Карточка — компактнее по высоте, чтобы кот снизу не перекрывал */
   .container {
     position: relative;
     background: rgba(255, 255, 255, 0.25);
@@ -198,7 +194,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 40px;
+    padding: 40px 45px 38px;
+    margin-bottom: 100px; /* сдвигаем карточку выше, чтобы кот был в свободной зоне */
     animation: glowPulse 3s ease-in-out infinite;
   }
 
@@ -237,12 +234,13 @@
     }
   }
 
+  /* Приветствие — с отступом, чтобы не наезжало на плеер */
   .greeting {
     font-family: 'Pacifico', cursive;
     font-size: 20px;
     color: #fff;
     opacity: 0.95;
-    margin-bottom: 15px;
+    margin-bottom: 22px;
     text-align: center;
     text-shadow: 0 2px 8px rgba(255, 77, 109, 0.5);
     line-height: 1.3;
@@ -250,17 +248,6 @@
 
   body.night .greeting {
     text-shadow: 0 2px 10px rgba(180, 150, 255, 0.6);
-  }
-
-  h1 {
-    font-family: 'Pacifico', cursive;
-    font-size: 32px;
-    color: #fff;
-    margin-bottom: 50px;
-    text-shadow: 0 2px 10px rgba(255, 77, 109, 0.4);
-    font-weight: 400;
-    text-align: center;
-    line-height: 1.3;
   }
 
   .burst-heart {
@@ -286,8 +273,8 @@
 
   .final h1 {
     font-family: 'Pacifico', cursive;
-    font-size: 44px;
-    margin-bottom: 12px;
+    font-size: 32px;
+    margin-bottom: 16px;
     color: #fff;
     font-weight: 400;
     text-shadow: 0 3px 0 #ff4d6d, 0 6px 20px rgba(255, 77, 109, 0.6);
@@ -297,9 +284,9 @@
 
   .final p {
     font-family: 'Pacifico', cursive;
-    font-size: 18px;
+    font-size: 15px;
     color: #ff4d6d;
-    margin-bottom: 12px;
+    margin-bottom: 18px;
     text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9), 0 0 20px rgba(255, 255, 255, 0.6);
   }
 
@@ -313,10 +300,20 @@
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 20px rgba(180, 150, 255, 0.5);
   }
 
-  .final .big-heart {
-    font-size: 90px;
+  .love-gif {
+    height: 1.1em;
+    width: auto;
+    vertical-align: middle;
     display: inline-block;
-    margin-bottom: 12px;
+    margin-left: 10px;
+    filter: drop-shadow(0 2px 6px rgba(255, 77, 109, 0.5));
+    border-radius: 8px;
+  }
+
+  .final .big-heart {
+    font-size: 80px;
+    display: inline-block;
+    margin-bottom: 16px;
     cursor: pointer;
     user-select: none;
     animation: pulse 1.2s ease-in-out infinite;
@@ -336,25 +333,30 @@
 
   .counter {
     font-family: 'Segoe UI', Arial, sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     color: #ff4d6d;
     background: rgba(255, 255, 255, 0.85);
-    padding: 8px 22px;
+    padding: 7px 20px;
     border-radius: 50px;
-    margin-top: 6px;
+    margin-top: 4px;
     display: inline-block;
     font-weight: 700;
     box-shadow: 0 6px 18px rgba(255, 77, 109, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.8);
   }
 
+  body.night .counter {
+    background: rgba(255, 255, 255, 0.15);
+    color: #d4b5ff;
+  }
+
   .together {
     font-family: 'Segoe UI', Arial, sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     color: #fff;
     background: linear-gradient(135deg, #ff4d6d, #ff8fa3);
-    padding: 10px 24px;
-    border-radius: 24px;
-    margin-top: 10px;
+    padding: 9px 22px;
+    border-radius: 22px;
+    margin-top: 16px;
     display: inline-block;
     font-weight: 700;
     letter-spacing: 0.5px;
@@ -373,28 +375,28 @@
 
   .together .label {
     display: block;
-    font-size: 11px;
+    font-size: 10px;
     opacity: 0.9;
     font-weight: 600;
     letter-spacing: 1px;
-    margin-bottom: 2px;
+    margin-bottom: 3px;
     text-transform: uppercase;
   }
 
   .together .value {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 800;
   }
 
   .start-date {
     font-family: 'Segoe UI', Arial, sans-serif;
-    font-size: 13px;
+    font-size: 12px;
     color: #fff;
     background: rgba(255, 255, 255, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.5);
-    padding: 8px 20px;
-    border-radius: 24px;
-    margin-top: 8px;
+    padding: 7px 18px;
+    border-radius: 22px;
+    margin-top: 14px;
     display: inline-block;
     font-weight: 600;
     letter-spacing: 0.5px;
@@ -405,22 +407,21 @@
 
   .start-date .label {
     display: block;
-    font-size: 10px;
+    font-size: 9px;
     opacity: 0.85;
     font-weight: 600;
     letter-spacing: 1px;
-    margin-bottom: 1px;
+    margin-bottom: 2px;
     text-transform: uppercase;
   }
 
-  /* Достижения */
   .achievements {
     position: fixed;
-    bottom: 10px;
-    left: 10px;
+    bottom: 20px;
+    left: 20px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
     z-index: 999998;
     max-width: 260px;
     pointer-events: none;
@@ -430,15 +431,15 @@
     background: linear-gradient(135deg, #ff4d6d, #ff8fa3);
     color: #fff;
     font-family: 'Segoe UI', Arial, sans-serif;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
-    padding: 8px 14px;
+    padding: 10px 16px;
     border-radius: 24px;
     box-shadow: 0 6px 18px rgba(255, 77, 109, 0.5),
                 inset 0 1px 0 rgba(255, 255, 255, 0.4);
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     letter-spacing: 0.3px;
     opacity: 0;
     transform: translateX(-120%);
@@ -456,16 +457,17 @@
     flex-shrink: 0;
   }
 
+  /* Кот — уменьшен, чтобы не закрывал карточку */
   .dancing-cat {
     position: fixed;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    height: 180px;
+    height: 160px;
     z-index: 5;
     pointer-events: none;
     display: none;
-    filter: drop-shadow(0 8px 20px rgba(255, 77, 109, 0.4));
+    filter: drop-shadow(0 10px 24px rgba(255, 77, 109, 0.4));
     animation: catDance 0.8s ease-in-out infinite;
     will-change: transform;
   }
@@ -474,25 +476,26 @@
 
   @keyframes catDance {
     0%, 100% { transform: translateX(-50%) translateY(0) rotate(-3deg); }
-    50%      { transform: translateX(-50%) translateY(-15px) rotate(3deg); }
+    50%      { transform: translateX(-50%) translateY(-12px) rotate(3deg); }
   }
 
+  /* Плеер — фиксирован, не мешает */
   .player {
     position: fixed;
-    top: 20px;
+    top: 15px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 20;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     max-width: 90vw;
   }
 
   .vinyl {
-    width: 120px;
-    height: 120px;
+    width: 80px;
+    height: 80px;
     object-fit: contain;
     cursor: pointer;
     filter: drop-shadow(0 8px 24px rgba(255, 77, 109, 0.5));
@@ -515,9 +518,9 @@
     background: rgba(255, 255, 255, 0.85);
     color: #ff4d6d;
     font-family: 'Segoe UI', Arial, sans-serif;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
-    padding: 6px 16px;
+    padding: 5px 14px;
     border-radius: 50px;
     text-align: center;
     white-space: nowrap;
@@ -533,7 +536,7 @@
     display: block;
     font-weight: 600;
     color: #c93a5b;
-    font-size: 12px;
+    font-size: 11px;
     margin-top: 2px;
   }
 
@@ -594,64 +597,57 @@
     padding: 14px 40px;
     font-size: 18px;
     font-weight: 700;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
   }
 
   /* ============================================
-     МОБИЛЬНАЯ АДАПТАЦИЯ — ПРАВИЛЬНОЕ ЦЕНТРИРОВАНИЕ
+     МОБИЛЬНАЯ ВЕРСИЯ
      ============================================ */
   @media (max-width: 700px) {
-    /* Убираем фиксированные padding-top/bottom, которые сдвигали карточку */
     body {
       align-items: center;
       justify-content: center;
-      padding: 0;
-      padding-top: env(safe-area-inset-top);
-      padding-bottom: env(safe-area-inset-bottom);
+      padding-top: calc(env(safe-area-inset-top) + 75px);
+      padding-bottom: calc(env(safe-area-inset-bottom) + 95px);
     }
 
     #loader h2 { font-size: 22px; margin-bottom: 20px; }
-    .progress-bar { width: 200px; }
+    .progress-bar { width: 200px; height: 10px; }
 
     .moon {
-      width: 70px;
-      height: 70px;
-      top: 6vh;
+      width: 60px;
+      height: 60px;
+      top: 5vh;
       right: 8vw;
-      box-shadow: -18px 8px 0 0 #fff8e7;
+      box-shadow: -15px 6px 0 0 #fff8e7;
     }
 
-    /* Плеер сверху */
-    .player {
-      top: 10px;
-      gap: 5px;
-    }
-    .vinyl { width: 62px; height: 62px; }
-    .track-info { font-size: 10px; padding: 4px 10px; max-width: 80vw; }
+    .player { top: calc(env(safe-area-inset-top) + 8px); gap: 4px; }
+    .vinyl { width: 52px; height: 52px; }
+    .track-info { font-size: 10px; padding: 4px 10px; max-width: 78vw; }
     .track-info .time { font-size: 9px; margin-top: 1px; }
 
-    /* Карточка — по центру, не растягивается по высоте */
     .container {
-      width: 92vw;
-      padding: 24px 18px;
-      border-radius: 24px;
-      margin-top: 60px;
-      margin-bottom: 80px;
+      width: 90vw;
+      padding: 22px 16px;
+      border-radius: 22px;
+      margin: 0;
     }
 
-    .greeting { font-size: 15px; margin-bottom: 10px; }
-    h1 { font-size: 22px; margin-bottom: 26px; line-height: 1.35; }
+    .greeting { font-size: 14px; margin-bottom: 12px; }
+    .final h1 { font-size: 20px; margin-bottom: 8px; -webkit-text-stroke: 1px rgba(255, 77, 109, 0.4); text-shadow: 0 2px 0 #ff4d6d, 0 4px 14px rgba(255, 77, 109, 0.6); }
+    .final p { font-size: 12px; margin-bottom: 10px; }
+    .final .big-heart { font-size: 56px; margin-bottom: 8px; }
+    .counter { font-size: 11px; padding: 5px 14px; margin-top: 4px; }
 
-    .final h1 { font-size: 26px; margin-bottom: 8px; }
-    .final p { font-size: 13px; margin-bottom: 8px; }
-    .final .big-heart { font-size: 62px; margin-bottom: 8px; }
-    .counter { font-size: 12px; padding: 6px 16px; margin-top: 5px; }
+    .together { font-size: 11px; padding: 7px 16px; margin-top: 10px; border-radius: 18px; }
+    .together .label { font-size: 9px; }
+    .together .value { font-size: 11px; }
 
-    .together { font-size: 12px; padding: 8px 18px; margin-top: 8px; border-radius: 20px; }
-    .together .label { font-size: 10px; }
-    .together .value { font-size: 12px; }
-
-    .start-date { font-size: 11px; padding: 6px 14px; margin-top: 6px; }
-    .start-date .label { font-size: 9px; }
+    .start-date { font-size: 10px; padding: 5px 12px; margin-top: 8px; }
+    .start-date .label { font-size: 8px; }
 
     .secret { padding: 24px; }
     .secret .secret-heart { font-size: 60px; margin-bottom: 15px; }
@@ -659,68 +655,80 @@
     .secret p { font-size: 17px; }
     .secret .close-btn { padding: 12px 30px; font-size: 16px; margin-top: 22px; }
 
-    .dancing-cat { height: 90px; }
+    .dancing-cat { height: 85px; }
+
+    .love-gif { height: 1.1em; margin-left: 6px; }
 
     .achievements {
-      bottom: 8px;
+      bottom: calc(env(safe-area-inset-bottom) + 6px);
       left: 8px;
-      max-width: 220px;
-      gap: 5px;
+      max-width: 200px;
+      gap: 4px;
     }
-    .achievement { font-size: 11px; padding: 6px 12px; }
-    .achievement .icon { font-size: 14px; }
+    .achievement { font-size: 10px; padding: 5px 10px; }
+    .achievement .icon { font-size: 13px; }
   }
 
   @media (max-width: 380px) {
-    .moon { width: 55px; height: 55px; box-shadow: -14px 6px 0 0 #fff8e7; }
-    .greeting { font-size: 13px; }
-    .container { padding: 20px 14px; margin-top: 55px; margin-bottom: 75px; }
-    .final h1 { font-size: 22px; }
-    .final p { font-size: 12px; }
-    .final .big-heart { font-size: 52px; }
-    .counter { font-size: 11px; padding: 5px 14px; }
-    .together { font-size: 11px; padding: 7px 16px; }
-    .together .value { font-size: 11px; }
-    .start-date { font-size: 10px; padding: 5px 12px; }
-    .vinyl { width: 56px; height: 56px; }
-    .track-info { font-size: 10px; }
-    .dancing-cat { height: 75px; }
+    body {
+      padding-top: calc(env(safe-area-inset-top) + 68px);
+      padding-bottom: calc(env(safe-area-inset-bottom) + 85px);
+    }
+    .moon { width: 50px; height: 50px; box-shadow: -12px 5px 0 0 #fff8e7; }
+    .greeting { font-size: 12px; }
+    .container { padding: 18px 14px; }
+    .final h1 { font-size: 18px; }
+    .final p { font-size: 11px; }
+    .final .big-heart { font-size: 48px; }
+    .counter { font-size: 10px; padding: 4px 12px; }
+    .together { font-size: 10px; padding: 6px 14px; }
+    .together .value { font-size: 10px; }
+    .start-date { font-size: 9px; padding: 4px 10px; }
+    .vinyl { width: 48px; height: 48px; }
+    .track-info { font-size: 9px; }
+    .dancing-cat { height: 70px; }
   }
 
-  /* Маленькая высота — уменьшаем отступы плееру и коту */
   @media (max-height: 700px) and (max-width: 700px) {
-    .vinyl { width: 56px; height: 56px; }
-    .greeting { font-size: 13px; margin-bottom: 8px; }
-    .container { padding: 20px 16px; margin-top: 55px; margin-bottom: 70px; }
-    .final .big-heart { font-size: 52px; }
-    .final h1 { font-size: 22px; }
-    .final p { font-size: 12px; }
-    .dancing-cat { height: 75px; }
+    body {
+      padding-top: calc(env(safe-area-inset-top) + 68px);
+      padding-bottom: calc(env(safe-area-inset-bottom) + 80px);
+    }
+    .vinyl { width: 48px; height: 48px; }
+    .greeting { font-size: 12px; margin-bottom: 8px; }
+    .container { padding: 18px 14px; }
+    .final .big-heart { font-size: 48px; }
+    .final h1 { font-size: 18px; }
+    .final p { font-size: 11px; }
+    .dancing-cat { height: 68px; }
   }
 
   @media (max-height: 500px) and (orientation: landscape) {
-    body { padding: 10px; align-items: center; justify-content: center; }
+    body {
+      padding: 10px;
+      align-items: center;
+      justify-content: center;
+    }
     .player {
-      top: 10px;
+      top: 8px;
       left: auto;
       right: 10px;
       transform: none;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
     }
-    .vinyl { width: 50px; height: 50px; }
-    .track-info { font-size: 10px; padding: 4px 10px; }
-    .track-info .time { font-size: 9px; }
-    .dancing-cat { height: 70px; }
-    .greeting { font-size: 12px; margin-bottom: 6px; }
-    h1 { font-size: 16px; margin-bottom: 12px; }
-    .container { padding: 16px 20px; max-width: 70vw; margin: 0; }
-    .final .big-heart { font-size: 44px; margin-bottom: 6px; }
-    .final h1 { font-size: 20px; margin-bottom: 6px; }
-    .final p { font-size: 12px; margin-bottom: 6px; }
-    .counter, .together, .start-date { font-size: 10px; padding: 5px 12px; }
-    .together .value { font-size: 10px; }
-    .moon { width: 50px; height: 50px; top: 5vh; right: 5vw; box-shadow: -12px 5px 0 0 #fff8e7; }
+    .vinyl { width: 42px; height: 42px; }
+    .track-info { font-size: 9px; padding: 3px 8px; }
+    .track-info .time { font-size: 8px; }
+    .dancing-cat { height: 60px; }
+    .greeting { font-size: 11px; margin-bottom: 6px; }
+    .final h1 { font-size: 16px; margin-bottom: 6px; }
+    .final p { font-size: 10px; margin-bottom: 6px; }
+    .container { padding: 14px 18px; max-width: 70vw; }
+    .final .big-heart { font-size: 38px; margin-bottom: 6px; }
+    .counter, .together, .start-date { font-size: 9px; padding: 4px 10px; }
+    .together .value { font-size: 9px; }
+    .moon { width: 44px; height: 44px; top: 4vh; right: 4vw; box-shadow: -10px 4px 0 0 #fff8e7; }
   }
 </style>
 </head>
@@ -800,21 +808,27 @@ else { greetingText = 'Спокойной ночи'; emoji = '🌙'; }
 const fullGreeting = `${greetingText}, ${name} ${emoji}`;
 
 // =====================
+// ВСЕГДА "КИСА" С ГИФКОЙ
+// =====================
+const loveTextHTML = `Люблю тебя, киса <img src="kota.gif" alt="kota" class="love-gif">`;
+
+// =====================
 // ЗВЁЗДЫ
 // =====================
 function createStars() {
   const starsContainer = document.getElementById('stars');
-  const starCount = window.innerWidth < 700 ? 50 : 110;
+  const starCount = window.innerWidth < 700 ? 45 : 110;
   for (let i = 0; i < starCount; i++) {
     const s = document.createElement('div');
     s.className = 'star';
-    const size = 1 + Math.random() * 2.5;
+    const size = 2 + Math.random() * 2;
     s.style.width = size + 'px';
     s.style.height = size + 'px';
     s.style.left = Math.random() * 100 + 'vw';
     s.style.top = Math.random() * 100 + 'vh';
     s.style.animationDuration = (1.5 + Math.random() * 3) + 's';
     s.style.animationDelay = Math.random() * 3 + 's';
+    s.style.opacity = 0.3 + Math.random() * 0.5;
     starsContainer.appendChild(s);
   }
 }
@@ -951,7 +965,7 @@ window.addEventListener('resize', () => {
 });
 
 const isMobile = window.innerWidth < 700;
-const PARTICLE_COUNT = isMobile ? 20 : 60;
+const PARTICLE_COUNT = isMobile ? 18 : 60;
 const particles = [];
 
 class Particle {
@@ -1024,7 +1038,7 @@ function createFallingHeart() {
   document.body.appendChild(h);
   setTimeout(() => h.remove(), (dur + 3) * 1000);
 }
-setInterval(createFallingHeart, isMobile ? 1000 : 500);
+setInterval(createFallingHeart, isMobile ? 1200 : 500);
 for (let i = 0; i < (isMobile ? 3 : 6); i++) createFallingHeart();
 
 // =====================
@@ -1108,8 +1122,8 @@ function showFinal() {
   containerEl.innerHTML = `
     <div class="greeting">${fullGreeting}</div>
     <span class="big-heart" id="bigHeart">❤️</span>
-    <h1>Я так и знал!</h1>
-    <p>Ты сделала меня счастливым 💖</p>
+    <h1>${loveTextHTML}</h1>
+    <p>Ты делаешь меня счастливым 💖</p>
     <div class="counter" id="counter">Кликов по сердцу: 0</div>
     <div class="together">
       <span class="label">Вместе уже</span>
@@ -1122,8 +1136,8 @@ function showFinal() {
   `;
 
   setInterval(() => {
-    explodeHearts(Math.random() * innerWidth, Math.random() * innerHeight, isMobile ? 6 : 15);
-  }, isMobile ? 600 : 300);
+    explodeHearts(Math.random() * innerWidth, Math.random() * innerHeight, isMobile ? 5 : 15);
+  }, isMobile ? 800 : 300);
 
   startTogetherCounter(FIXED_DATE);
 
@@ -1137,7 +1151,7 @@ function showFinal() {
     counter.textContent = 'Кликов по сердцу: ' + clicks;
 
     const r = bigHeart.getBoundingClientRect();
-    explodeHearts(r.left + r.width / 2, r.top + r.height / 2, isMobile ? 15 : 30);
+    explodeHearts(r.left + r.width / 2, r.top + r.height / 2, isMobile ? 12 : 30);
 
     if (navigator.vibrate) navigator.vibrate(30);
 
