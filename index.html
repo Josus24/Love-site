@@ -2,9 +2,11 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#ff9a9e">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
 <title>Загрузка...</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,17 +20,19 @@
     font-family: 'Segoe UI', Arial, sans-serif;
     overscroll-behavior: none;
     touch-action: manipulation;
+    position: fixed;
+    overflow: hidden;
   }
 
   body {
     cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><path d='M16 28 C 4 18, 4 8, 10 6 C 13 5, 15 7, 16 9 C 17 7, 19 5, 22 6 C 28 8, 28 18, 16 28 Z' fill='%23ff4d6d' stroke='white' stroke-width='1.5'/></svg>") 16 16, auto;
-    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
     transition: background 1s ease;
     -webkit-user-select: none;
     user-select: none;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   }
 
   body.morning { background: linear-gradient(135deg, #ffd8a8 0%, #ffb3c1 50%, #fecfef 100%); }
@@ -128,8 +132,7 @@
     border: 1px solid rgba(255, 255, 255, 0.4);
     z-index: 10;
     width: 640px;
-    max-width: 90vw;
-    min-height: 380px;
+    max-width: 92vw;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -182,6 +185,10 @@
     white-space: nowrap;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
+    min-height: 56px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   #yesBtn {
@@ -207,6 +214,7 @@
     pointer-events: none;
     user-select: none;
     z-index: 99999;
+    will-change: transform, opacity;
   }
 
   @keyframes burst {
@@ -346,6 +354,7 @@
     display: none;
     filter: drop-shadow(0 8px 20px rgba(255, 77, 109, 0.4));
     animation: catDance 0.8s ease-in-out infinite;
+    will-change: transform;
   }
 
   .dancing-cat.show { display: block; }
@@ -378,6 +387,7 @@
     animation-play-state: paused;
     transition: transform 0.2s ease;
     -webkit-tap-highlight-color: transparent;
+    will-change: transform;
   }
 
   .vinyl:hover { transform: scale(1.08); }
@@ -465,67 +475,40 @@
   /* ============ МОБИЛЬНАЯ АДАПТАЦИЯ ============ */
   @media (max-width: 700px) {
     body {
-      align-items: flex-start;
-      padding-top: 130px;
-      padding-bottom: 140px;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 120px;
+      padding-bottom: 120px;
     }
 
     #loader h2 { font-size: 22px; margin-bottom: 20px; }
     .progress-bar { width: 200px; }
 
-    .player {
-      top: 12px;
-      gap: 6px;
-    }
-    .vinyl { width: 80px; height: 80px; }
-    .track-info {
-      font-size: 11px;
-      padding: 5px 12px;
-      max-width: 85vw;
-    }
+    .player { top: 12px; gap: 6px; }
+    .vinyl { width: 76px; height: 76px; }
+    .track-info { font-size: 11px; padding: 5px 12px; max-width: 85vw; }
     .track-info .time { font-size: 10px; margin-top: 1px; }
 
     .container {
       width: 92vw;
-      min-height: unset;
-      height: auto;
-      padding: 32px 20px;
+      padding: 28px 18px;
       border-radius: 24px;
     }
 
-    h1 {
-      font-size: 22px;
-      margin-bottom: 28px;
-      line-height: 1.35;
-    }
-
+    h1 { font-size: 22px; margin-bottom: 26px; line-height: 1.35; }
     .buttons { gap: 12px; }
+    button { padding: 14px 32px; font-size: 17px; min-height: 50px; }
 
-    button {
-      padding: 14px 32px;
-      font-size: 17px;
-    }
-
-    .final h1 { font-size: 30px; margin-bottom: 10px; }
-    .final p { font-size: 15px; margin-bottom: 10px; }
-    .final .big-heart { font-size: 72px; margin-bottom: 10px; }
-
+    .final h1 { font-size: 28px; margin-bottom: 10px; }
+    .final p { font-size: 14px; margin-bottom: 10px; }
+    .final .big-heart { font-size: 68px; margin-bottom: 10px; }
     .counter { font-size: 12px; padding: 6px 16px; margin-top: 5px; }
 
-    .together {
-      font-size: 12px;
-      padding: 8px 18px;
-      margin-top: 8px;
-      border-radius: 20px;
-    }
+    .together { font-size: 12px; padding: 8px 18px; margin-top: 8px; border-radius: 20px; }
     .together .label { font-size: 10px; }
     .together .value { font-size: 12px; }
 
-    .start-date {
-      font-size: 11px;
-      padding: 6px 14px;
-      margin-top: 6px;
-    }
+    .start-date { font-size: 11px; padding: 6px 14px; margin-top: 6px; }
     .start-date .label { font-size: 9px; }
 
     .secret { padding: 24px; }
@@ -534,51 +517,60 @@
     .secret p { font-size: 17px; }
     .secret .close-btn { padding: 12px 30px; font-size: 16px; margin-top: 22px; }
 
-    .dancing-cat {
-      height: 110px;
-      opacity: 0.95;
-    }
+    .dancing-cat { height: 100px; }
   }
 
-  /* Очень маленькие экраны (iPhone SE, старые андроиды) */
+  /* Очень маленькие экраны */
   @media (max-width: 380px) {
-    body { padding-top: 115px; }
-
+    body { padding-top: 105px; padding-bottom: 100px; }
     h1 { font-size: 19px; margin-bottom: 22px; }
-    button { padding: 12px 26px; font-size: 15px; }
-
-    .final h1 { font-size: 26px; }
+    button { padding: 12px 26px; font-size: 15px; min-height: 46px; }
+    .final h1 { font-size: 24px; }
     .final p { font-size: 13px; }
-    .final .big-heart { font-size: 60px; }
-
+    .final .big-heart { font-size: 56px; }
     .counter { font-size: 11px; padding: 5px 14px; }
     .together { font-size: 11px; padding: 7px 16px; }
     .together .value { font-size: 11px; }
     .start-date { font-size: 10px; padding: 5px 12px; }
-
-    .vinyl { width: 70px; height: 70px; }
+    .vinyl { width: 64px; height: 64px; }
     .track-info { font-size: 10px; }
-    .dancing-cat { height: 90px; }
+    .dancing-cat { height: 80px; }
   }
 
-  /* Ландшафт на телефоне — компактнее */
-  @media (max-height: 500px) and (orientation: landscape) {
-    body {
-      padding-top: 10px;
-      padding-bottom: 10px;
-      align-items: center;
-    }
-    .player {
-      top: 8px;
-      flex-direction: row;
-      gap: 10px;
-    }
-    .vinyl { width: 60px; height: 60px; }
+  /* Маленькая высота — сжимаем вертикально */
+  @media (max-height: 700px) and (max-width: 700px) {
+    body { padding-top: 100px; padding-bottom: 90px; }
+    .vinyl { width: 64px; height: 64px; }
+    h1 { font-size: 19px; margin-bottom: 18px; }
+    .container { padding: 22px 16px; }
+    .final .big-heart { font-size: 56px; }
+    .final h1 { font-size: 24px; }
+    .final p { font-size: 13px; }
     .dancing-cat { height: 80px; }
-    h1 { font-size: 18px; margin-bottom: 16px; }
-    .container { padding: 20px 24px; }
-    .final .big-heart { font-size: 50px; }
-    .final h1 { font-size: 22px; }
+  }
+
+  /* Ландшафт — плеер сбоку */
+  @media (max-height: 500px) and (orientation: landscape) {
+    body { padding: 10px; align-items: center; }
+    .player {
+      top: 10px;
+      left: auto;
+      right: 10px;
+      transform: none;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .vinyl { width: 50px; height: 50px; }
+    .track-info { font-size: 10px; padding: 4px 10px; }
+    .track-info .time { font-size: 9px; }
+    .dancing-cat { height: 70px; }
+    h1 { font-size: 16px; margin-bottom: 12px; }
+    .container { padding: 16px 20px; max-width: 80vw; }
+    .final .big-heart { font-size: 44px; margin-bottom: 6px; }
+    .final h1 { font-size: 20px; margin-bottom: 6px; }
+    .final p { font-size: 12px; margin-bottom: 6px; }
+    .counter, .together, .start-date { font-size: 10px; padding: 5px 12px; }
+    .together .value { font-size: 10px; }
   }
 </style>
 </head>
@@ -622,9 +614,9 @@
 
 <script>
 // =====================
-// КЛЮЧ ДЛЯ ХРАНЕНИЯ ДАТЫ
+// ФИКСИРОВАННАЯ ДАТА
 // =====================
-const STORAGE_KEY = 'loveStartDate_v18';
+const FIXED_DATE = new Date('2026-09-19T01:49:00').getTime();
 
 // =====================
 // ФОН ПО ВРЕМЕНИ СУТОК
@@ -650,7 +642,7 @@ if (name) {
 }
 
 // =====================
-// ЭКРАН ЗАГРУЗКИ
+// ЭКРАН ЗАГРУЗКИ — сразу финал
 // =====================
 const loader = document.getElementById('loader');
 const progressFill = document.getElementById('progressFill');
@@ -665,12 +657,7 @@ const progressInterval = setInterval(() => {
     setTimeout(() => {
       loader.classList.add('hide');
       setTimeout(() => loader.remove(), 700);
-
-      if (localStorage.getItem(STORAGE_KEY)) {
-        showFinal();
-      } else {
-        containerEl.style.display = 'flex';
-      }
+      showFinal();
     }, 200);
   }
 }, 40);
@@ -737,9 +724,9 @@ window.addEventListener('resize', () => {
   H = canvas.height = window.innerHeight;
 });
 
-// На мобилке меньше частиц, чтобы не тормозило
-const PARTICLE_COUNT = window.innerWidth < 700 ? 30 : 60;
-
+// На мобилке — минимум частиц
+const isMobile = window.innerWidth < 700;
+const PARTICLE_COUNT = isMobile ? 20 : 60;
 const particles = [];
 
 class Particle {
@@ -804,7 +791,7 @@ function createFallingHeart() {
   h.addEventListener('click', (e) => {
     e.stopPropagation();
     const r = h.getBoundingClientRect();
-    explodeHearts(r.left + r.width / 2, r.top + r.height / 2, 20);
+    explodeHearts(r.left + r.width / 2, r.top + r.height / 2, 15);
     h.remove();
     if (navigator.vibrate) navigator.vibrate(30);
   });
@@ -812,15 +799,14 @@ function createFallingHeart() {
   document.body.appendChild(h);
   setTimeout(() => h.remove(), (dur + 3) * 1000);
 }
-setInterval(createFallingHeart, window.innerWidth < 700 ? 800 : 500);
-for (let i = 0; i < (window.innerWidth < 700 ? 4 : 6); i++) createFallingHeart();
+setInterval(createFallingHeart, isMobile ? 1000 : 500);
+for (let i = 0; i < (isMobile ? 3 : 6); i++) createFallingHeart();
 
 // =====================
 // ВЗРЫВ СЕРДЕЧЕК
 // =====================
 function explodeHearts(x, y, count = 80) {
-  // На мобилке меньше сердечек, чтобы не тормозило
-  const actualCount = window.innerWidth < 700 ? Math.floor(count / 2) : count;
+  const actualCount = isMobile ? Math.floor(count / 3) : count;
   for (let i = 0; i < actualCount; i++) {
     const h = document.createElement('div');
     h.className = 'burst-heart';
@@ -829,7 +815,7 @@ function explodeHearts(x, y, count = 80) {
     h.style.top = y + 'px';
     h.style.fontSize = (18 + Math.random() * 30) + 'px';
     const angle = Math.random() * Math.PI * 2;
-    const dist = 150 + Math.random() * 400;
+    const dist = 150 + Math.random() * 350;
     h.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
     h.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
     const dur = 1 + Math.random() * 1.5;
@@ -883,9 +869,6 @@ function formatDateFull(timestamp) {
 // ФИНАЛЬНЫЙ ЭКРАН
 // =====================
 function showFinal() {
-  const startDate = parseInt(localStorage.getItem(STORAGE_KEY), 10);
-  if (!startDate) return;
-
   document.querySelectorAll('.heart').forEach(h => h.remove());
 
   document.getElementById('dancingCat').classList.add('show');
@@ -894,7 +877,7 @@ function showFinal() {
     audio.play().then(() => vinyl.classList.add('playing')).catch(() => {});
   }
 
-  const dateStr = formatDateFull(startDate);
+  const dateStr = formatDateFull(FIXED_DATE);
 
   const oldContainer = document.getElementById('container');
   if (oldContainer) {
@@ -916,11 +899,12 @@ function showFinal() {
     `;
   }
 
+  // Дождь сердечек — реже на мобилке
   setInterval(() => {
-    explodeHearts(Math.random() * innerWidth, Math.random() * innerHeight, 15);
-  }, 300);
+    explodeHearts(Math.random() * innerWidth, Math.random() * innerHeight, isMobile ? 6 : 15);
+  }, isMobile ? 600 : 300);
 
-  startTogetherCounter(startDate);
+  startTogetherCounter(FIXED_DATE);
 
   let clicks = 0;
   const bigHeart = document.getElementById('bigHeart');
@@ -932,7 +916,7 @@ function showFinal() {
     counter.textContent = 'Кликов по сердцу: ' + clicks;
 
     const r = bigHeart.getBoundingClientRect();
-    explodeHearts(r.left + r.width / 2, r.top + r.height / 2, 30);
+    explodeHearts(r.left + r.width / 2, r.top + r.height / 2, isMobile ? 15 : 30);
 
     if (navigator.vibrate) navigator.vibrate(30);
 
@@ -952,113 +936,6 @@ function showFinal() {
     secret.classList.remove('show');
   });
 }
-
-// =====================
-// КНОПКА «НЕТ»
-// =====================
-const noBtn = document.getElementById('noBtn');
-const yesBtn = document.getElementById('yesBtn');
-
-const noTexts = ['Нет','Точно нет?','Подумай ещё','Ну пожалуйста','Не будь такой','Я расстроюсь','Последний шанс','Ты уверена?','Я плачу 😢','Ладно, жми Да'];
-
-let attempt = 0;
-let initialized = false;
-let startW = 0;
-let startH = 0;
-let yesScale = 1;
-
-function moveNo() {
-  if (attempt < noTexts.length) noBtn.textContent = noTexts[attempt];
-  attempt++;
-
-  if (navigator.vibrate) navigator.vibrate(20);
-
-  if (!initialized) {
-    const btnRect = noBtn.getBoundingClientRect();
-    const contRect = containerEl.getBoundingClientRect();
-
-    startW = btnRect.width;
-    startH = btnRect.height;
-
-    noBtn.style.position = 'absolute';
-    noBtn.style.left = (btnRect.left - contRect.left) + 'px';
-    noBtn.style.top = (btnRect.top - contRect.top) + 'px';
-    noBtn.style.margin = '0';
-    noBtn.style.padding = '0';
-    noBtn.style.display = 'flex';
-    noBtn.style.alignItems = 'center';
-    noBtn.style.justifyContent = 'center';
-    noBtn.style.width = startW + 'px';
-    noBtn.style.height = startH + 'px';
-    noBtn.style.transition = 'left 0.35s ease, top 0.35s ease, width 0.35s ease, height 0.35s ease, font-size 0.35s ease, opacity 0.35s ease';
-    initialized = true;
-
-    yesBtn.style.animation = 'none';
-  }
-
-  const factor = Math.pow(0.85, attempt);
-  const newW = Math.max(40, startW * factor);
-  const newH = Math.max(20, startH * factor);
-  const newFont = Math.max(7, 18 * factor);
-  const newOpacity = Math.max(0, 1 - attempt * 0.1);
-
-  noBtn.style.width = newW + 'px';
-  noBtn.style.height = newH + 'px';
-  noBtn.style.fontSize = newFont + 'px';
-  noBtn.style.opacity = newOpacity;
-
-  yesScale += 0.12;
-  if (yesScale > 1.8) yesScale = 1.8;
-  yesBtn.style.transform = `scale(${yesScale})`;
-
-  const cw = containerEl.clientWidth;
-  const ch = containerEl.clientHeight;
-  const cs = getComputedStyle(containerEl);
-  const padL = parseFloat(cs.paddingLeft);
-  const padR = parseFloat(cs.paddingRight);
-  const padT = parseFloat(cs.paddingTop);
-  const padB = parseFloat(cs.paddingBottom);
-
-  const minX = padL;
-  const minY = padT;
-  const maxX = Math.max(minX, cw - padR - newW);
-  const maxY = Math.max(minY, ch - padB - newH);
-
-  const x = minX + Math.random() * (maxX - minX);
-  const y = minY + Math.random() * (maxY - minY);
-
-  noBtn.style.left = Math.round(x) + 'px';
-  noBtn.style.top = Math.round(y) + 'px';
-
-  if (attempt >= 9) {
-    noBtn.style.transition = 'opacity 0.5s ease';
-    noBtn.style.opacity = '0';
-    setTimeout(() => { noBtn.style.display = 'none'; }, 550);
-  }
-}
-
-noBtn.addEventListener('mouseenter', moveNo);
-noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveNo(); }, { passive: false });
-noBtn.addEventListener('click', (e) => { e.preventDefault(); moveNo(); });
-
-// =====================
-// КНОПКА «ДА»
-// =====================
-yesBtn.addEventListener('click', () => {
-  const rect = yesBtn.getBoundingClientRect();
-  explodeHearts(rect.left + rect.width / 2, rect.top + rect.height / 2, 120);
-
-  document.body.classList.add('shake');
-  setTimeout(() => document.body.classList.remove('shake'), 500);
-
-  if (navigator.vibrate) navigator.vibrate([80, 40, 120]);
-
-  if (!localStorage.getItem(STORAGE_KEY)) {
-    localStorage.setItem(STORAGE_KEY, Date.now().toString());
-  }
-
-  setTimeout(showFinal, 400);
-});
 
 // Блокируем прокрутку двойным тапом на iOS
 let lastTouchEnd = 0;
