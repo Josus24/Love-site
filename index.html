@@ -38,7 +38,7 @@
   body.morning { background: linear-gradient(135deg, #ffd8a8 0%, #ffb3c1 50%, #fecfef 100%); }
   body.day { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%); }
   body.evening { background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 40%, #c98fa8 100%); }
-  body.night { background: linear-gradient(135deg, #2c2a4a 0%, #4f3d6b 50%, #7a4d7e 100%); }
+  body.night { background: linear-gradient(135deg, #1a1535 0%, #2c2a4a 40%, #4f3d6b 100%); }
 
   body.shake { animation: screenShake 0.5s ease; }
 
@@ -55,10 +55,62 @@
     90% { transform: translate(-1px, 1px); }
   }
 
+  /* Звёзды + полумесяц для ночного режима */
+  #stars {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+  }
+
+  body.night #stars { opacity: 1; }
+
+  .star {
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle linear infinite;
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50%      { opacity: 1; transform: scale(1.3); }
+  }
+
+  /* Полумесяц */
+  .moon {
+    position: absolute;
+    top: 8vh;
+    right: 8vw;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    box-shadow: -25px 10px 0 0 #fff8e7;
+    filter: drop-shadow(0 0 30px rgba(255, 248, 231, 0.7))
+            drop-shadow(0 0 60px rgba(255, 248, 231, 0.4));
+    animation: moonGlow 4s ease-in-out infinite;
+    transform: rotate(-25deg);
+  }
+
+  @keyframes moonGlow {
+    0%, 100% {
+      filter: drop-shadow(0 0 30px rgba(255, 248, 231, 0.7))
+              drop-shadow(0 0 60px rgba(255, 248, 231, 0.4));
+    }
+    50% {
+      filter: drop-shadow(0 0 45px rgba(255, 248, 231, 0.95))
+              drop-shadow(0 0 90px rgba(255, 248, 231, 0.6));
+    }
+  }
+
+  /* Экран загрузки — фон теперь наследует цвет body */
   #loader {
     position: fixed;
     inset: 0;
-    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+    background: transparent;
     z-index: 100000;
     display: flex;
     flex-direction: column;
@@ -79,6 +131,10 @@
     text-shadow: 0 2px 10px rgba(255, 77, 109, 0.4);
   }
 
+  body.night #loader h2 {
+    text-shadow: 0 2px 10px rgba(180, 150, 255, 0.6);
+  }
+
   .progress-bar {
     width: 260px;
     max-width: 80vw;
@@ -95,6 +151,10 @@
     background: linear-gradient(90deg, #ff4d6d, #ff8fa3);
     border-radius: 10px;
     transition: width 0.1s linear;
+  }
+
+  body.night .progress-fill {
+    background: linear-gradient(90deg, #b496ff, #d4b5ff);
   }
 
   #particles {
@@ -123,6 +183,7 @@
     100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
   }
 
+  /* Карточка */
   .container {
     position: relative;
     background: rgba(255, 255, 255, 0.25);
@@ -141,6 +202,11 @@
     animation: glowPulse 3s ease-in-out infinite;
   }
 
+  body.night .container {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+  }
+
   @keyframes glowPulse {
     0%, 100% {
       box-shadow: 0 20px 60px rgba(255, 77, 109, 0.25),
@@ -154,6 +220,38 @@
     }
   }
 
+  body.night .container {
+    animation: glowPulseNight 3s ease-in-out infinite;
+  }
+
+  @keyframes glowPulseNight {
+    0%, 100% {
+      box-shadow: 0 20px 60px rgba(180, 150, 255, 0.25),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                  0 0 0 rgba(180, 150, 255, 0);
+    }
+    50% {
+      box-shadow: 0 20px 70px rgba(180, 150, 255, 0.5),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                  0 0 40px rgba(180, 150, 255, 0.45);
+    }
+  }
+
+  .greeting {
+    font-family: 'Pacifico', cursive;
+    font-size: 20px;
+    color: #fff;
+    opacity: 0.95;
+    margin-bottom: 15px;
+    text-align: center;
+    text-shadow: 0 2px 8px rgba(255, 77, 109, 0.5);
+    line-height: 1.3;
+  }
+
+  body.night .greeting {
+    text-shadow: 0 2px 10px rgba(180, 150, 255, 0.6);
+  }
+
   h1 {
     font-family: 'Pacifico', cursive;
     font-size: 32px;
@@ -163,50 +261,6 @@
     font-weight: 400;
     text-align: center;
     line-height: 1.3;
-  }
-
-  .buttons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-
-  button {
-    padding: 16px 48px;
-    font-size: 20px;
-    font-weight: 600;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    font-family: inherit;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-    min-height: 56px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  #yesBtn {
-    background: linear-gradient(135deg, #ff4d6d, #ff8fa3);
-    color: #fff;
-    box-shadow: 0 8px 20px rgba(255, 77, 109, 0.45);
-    animation: yesPulse 1.5s ease-in-out infinite;
-  }
-
-  @keyframes yesPulse {
-    0%, 100% { transform: scale(1); box-shadow: 0 8px 20px rgba(255, 77, 109, 0.45); }
-    50%      { transform: scale(1.06); box-shadow: 0 12px 32px rgba(255, 77, 109, 0.7); }
-  }
-
-  #noBtn {
-    background: #fff;
-    color: #ff4d6d;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   }
 
   .burst-heart {
@@ -247,6 +301,16 @@
     color: #ff4d6d;
     margin-bottom: 12px;
     text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9), 0 0 20px rgba(255, 255, 255, 0.6);
+  }
+
+  body.night .final h1 {
+    text-shadow: 0 3px 0 #b496ff, 0 6px 20px rgba(180, 150, 255, 0.6);
+    -webkit-text-stroke: 1px rgba(180, 150, 255, 0.4);
+  }
+
+  body.night .final p {
+    color: #d4b5ff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 20px rgba(180, 150, 255, 0.5);
   }
 
   .final .big-heart {
@@ -301,6 +365,12 @@
     max-width: 90%;
   }
 
+  body.night .together {
+    background: linear-gradient(135deg, #7a4d9e, #b496ff);
+    box-shadow: 0 8px 22px rgba(180, 150, 255, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+
   .together .label {
     display: block;
     font-size: 11px;
@@ -341,6 +411,49 @@
     letter-spacing: 1px;
     margin-bottom: 1px;
     text-transform: uppercase;
+  }
+
+  /* Достижения */
+  .achievements {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 999998;
+    max-width: 260px;
+    pointer-events: none;
+  }
+
+  .achievement {
+    background: linear-gradient(135deg, #ff4d6d, #ff8fa3);
+    color: #fff;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 24px;
+    box-shadow: 0 6px 18px rgba(255, 77, 109, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: 0.3px;
+    opacity: 0;
+    transform: translateX(-120%);
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    line-height: 1.2;
+  }
+
+  .achievement.show {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .achievement .icon {
+    font-size: 16px;
+    flex-shrink: 0;
   }
 
   .dancing-cat {
@@ -424,6 +537,17 @@
     margin-top: 2px;
   }
 
+  body.night .track-info {
+    background: rgba(180, 150, 255, 0.25);
+    color: #e0d4ff;
+    box-shadow: 0 6px 18px rgba(180, 150, 255, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  body.night .track-info .time {
+    color: #d4b5ff;
+  }
+
   .secret {
     position: fixed;
     inset: 0;
@@ -472,36 +596,54 @@
     font-weight: 700;
   }
 
-  /* ============ МОБИЛЬНАЯ АДАПТАЦИЯ ============ */
+  /* ============================================
+     МОБИЛЬНАЯ АДАПТАЦИЯ — ПРАВИЛЬНОЕ ЦЕНТРИРОВАНИЕ
+     ============================================ */
   @media (max-width: 700px) {
+    /* Убираем фиксированные padding-top/bottom, которые сдвигали карточку */
     body {
       align-items: center;
-      justify-content: flex-start;
-      padding-top: 120px;
-      padding-bottom: 120px;
+      justify-content: center;
+      padding: 0;
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
     }
 
     #loader h2 { font-size: 22px; margin-bottom: 20px; }
     .progress-bar { width: 200px; }
 
-    .player { top: 12px; gap: 6px; }
-    .vinyl { width: 76px; height: 76px; }
-    .track-info { font-size: 11px; padding: 5px 12px; max-width: 85vw; }
-    .track-info .time { font-size: 10px; margin-top: 1px; }
-
-    .container {
-      width: 92vw;
-      padding: 28px 18px;
-      border-radius: 24px;
+    .moon {
+      width: 70px;
+      height: 70px;
+      top: 6vh;
+      right: 8vw;
+      box-shadow: -18px 8px 0 0 #fff8e7;
     }
 
-    h1 { font-size: 22px; margin-bottom: 26px; line-height: 1.35; }
-    .buttons { gap: 12px; }
-    button { padding: 14px 32px; font-size: 17px; min-height: 50px; }
+    /* Плеер сверху */
+    .player {
+      top: 10px;
+      gap: 5px;
+    }
+    .vinyl { width: 62px; height: 62px; }
+    .track-info { font-size: 10px; padding: 4px 10px; max-width: 80vw; }
+    .track-info .time { font-size: 9px; margin-top: 1px; }
 
-    .final h1 { font-size: 28px; margin-bottom: 10px; }
-    .final p { font-size: 14px; margin-bottom: 10px; }
-    .final .big-heart { font-size: 68px; margin-bottom: 10px; }
+    /* Карточка — по центру, не растягивается по высоте */
+    .container {
+      width: 92vw;
+      padding: 24px 18px;
+      border-radius: 24px;
+      margin-top: 60px;
+      margin-bottom: 80px;
+    }
+
+    .greeting { font-size: 15px; margin-bottom: 10px; }
+    h1 { font-size: 22px; margin-bottom: 26px; line-height: 1.35; }
+
+    .final h1 { font-size: 26px; margin-bottom: 8px; }
+    .final p { font-size: 13px; margin-bottom: 8px; }
+    .final .big-heart { font-size: 62px; margin-bottom: 8px; }
     .counter { font-size: 12px; padding: 6px 16px; margin-top: 5px; }
 
     .together { font-size: 12px; padding: 8px 18px; margin-top: 8px; border-radius: 20px; }
@@ -517,41 +659,47 @@
     .secret p { font-size: 17px; }
     .secret .close-btn { padding: 12px 30px; font-size: 16px; margin-top: 22px; }
 
-    .dancing-cat { height: 100px; }
+    .dancing-cat { height: 90px; }
+
+    .achievements {
+      bottom: 8px;
+      left: 8px;
+      max-width: 220px;
+      gap: 5px;
+    }
+    .achievement { font-size: 11px; padding: 6px 12px; }
+    .achievement .icon { font-size: 14px; }
   }
 
-  /* Очень маленькие экраны */
   @media (max-width: 380px) {
-    body { padding-top: 105px; padding-bottom: 100px; }
-    h1 { font-size: 19px; margin-bottom: 22px; }
-    button { padding: 12px 26px; font-size: 15px; min-height: 46px; }
-    .final h1 { font-size: 24px; }
-    .final p { font-size: 13px; }
-    .final .big-heart { font-size: 56px; }
+    .moon { width: 55px; height: 55px; box-shadow: -14px 6px 0 0 #fff8e7; }
+    .greeting { font-size: 13px; }
+    .container { padding: 20px 14px; margin-top: 55px; margin-bottom: 75px; }
+    .final h1 { font-size: 22px; }
+    .final p { font-size: 12px; }
+    .final .big-heart { font-size: 52px; }
     .counter { font-size: 11px; padding: 5px 14px; }
     .together { font-size: 11px; padding: 7px 16px; }
     .together .value { font-size: 11px; }
     .start-date { font-size: 10px; padding: 5px 12px; }
-    .vinyl { width: 64px; height: 64px; }
+    .vinyl { width: 56px; height: 56px; }
     .track-info { font-size: 10px; }
-    .dancing-cat { height: 80px; }
+    .dancing-cat { height: 75px; }
   }
 
-  /* Маленькая высота — сжимаем вертикально */
+  /* Маленькая высота — уменьшаем отступы плееру и коту */
   @media (max-height: 700px) and (max-width: 700px) {
-    body { padding-top: 100px; padding-bottom: 90px; }
-    .vinyl { width: 64px; height: 64px; }
-    h1 { font-size: 19px; margin-bottom: 18px; }
-    .container { padding: 22px 16px; }
-    .final .big-heart { font-size: 56px; }
-    .final h1 { font-size: 24px; }
-    .final p { font-size: 13px; }
-    .dancing-cat { height: 80px; }
+    .vinyl { width: 56px; height: 56px; }
+    .greeting { font-size: 13px; margin-bottom: 8px; }
+    .container { padding: 20px 16px; margin-top: 55px; margin-bottom: 70px; }
+    .final .big-heart { font-size: 52px; }
+    .final h1 { font-size: 22px; }
+    .final p { font-size: 12px; }
+    .dancing-cat { height: 75px; }
   }
 
-  /* Ландшафт — плеер сбоку */
   @media (max-height: 500px) and (orientation: landscape) {
-    body { padding: 10px; align-items: center; }
+    body { padding: 10px; align-items: center; justify-content: center; }
     .player {
       top: 10px;
       left: auto;
@@ -564,19 +712,25 @@
     .track-info { font-size: 10px; padding: 4px 10px; }
     .track-info .time { font-size: 9px; }
     .dancing-cat { height: 70px; }
+    .greeting { font-size: 12px; margin-bottom: 6px; }
     h1 { font-size: 16px; margin-bottom: 12px; }
-    .container { padding: 16px 20px; max-width: 80vw; }
+    .container { padding: 16px 20px; max-width: 70vw; margin: 0; }
     .final .big-heart { font-size: 44px; margin-bottom: 6px; }
     .final h1 { font-size: 20px; margin-bottom: 6px; }
     .final p { font-size: 12px; margin-bottom: 6px; }
     .counter, .together, .start-date { font-size: 10px; padding: 5px 12px; }
     .together .value { font-size: 10px; }
+    .moon { width: 50px; height: 50px; top: 5vh; right: 5vw; box-shadow: -12px 5px 0 0 #fff8e7; }
   }
 </style>
 </head>
 <body>
 
 <audio id="bgMusic" src="МУККА - Дыхание твое.mp3" loop preload="auto"></audio>
+
+<div id="stars">
+  <div class="moon"></div>
+</div>
 
 <div id="loader">
   <h2>Загрузка признания…</h2>
@@ -595,15 +749,11 @@
   </div>
 </div>
 
-<div class="container" id="container" style="display:none;">
-  <h1 id="question">Ты будешь со мной? 💕</h1>
-  <div class="buttons">
-    <button id="yesBtn">Да</button>
-    <button id="noBtn">Нет</button>
-  </div>
-</div>
+<div class="container" id="container" style="display:none;"></div>
 
 <img src="scuba-scuba-cat.gif" alt="Танцующий кот" class="dancing-cat" id="dancingCat">
+
+<div class="achievements" id="achievements"></div>
 
 <div class="secret" id="secret">
   <div class="secret-heart">💖</div>
@@ -619,6 +769,12 @@
 const FIXED_DATE = new Date('2026-09-19T01:49:00').getTime();
 
 // =====================
+// ИМЯ ИЗ URL
+// =====================
+const urlParams = new URLSearchParams(window.location.search);
+const name = urlParams.get('name') || 'Лика';
+
+// =====================
 // ФОН ПО ВРЕМЕНИ СУТОК
 // =====================
 function setTimeOfDay() {
@@ -632,17 +788,87 @@ function setTimeOfDay() {
 setTimeOfDay();
 
 // =====================
-// ИМЯ ИЗ URL
+// ПРИВЕТСТВИЕ
 // =====================
-const urlParams = new URLSearchParams(window.location.search);
-const name = urlParams.get('name');
-if (name) {
-  document.getElementById('question').textContent = name + ', ты будешь со мной? 💕';
-  document.title = name + ', ты будешь со мной?';
-}
+const hour = new Date().getHours();
+let greetingText = '';
+let emoji = '';
+if (hour >= 5 && hour < 12) { greetingText = 'Доброе утро'; emoji = '☀️'; }
+else if (hour >= 12 && hour < 17) { greetingText = 'Добрый день'; emoji = '🌸'; }
+else if (hour >= 17 && hour < 22) { greetingText = 'Добрый вечер'; emoji = '🌆'; }
+else { greetingText = 'Спокойной ночи'; emoji = '🌙'; }
+const fullGreeting = `${greetingText}, ${name} ${emoji}`;
 
 // =====================
-// ЭКРАН ЗАГРУЗКИ — сразу финал
+// ЗВЁЗДЫ
+// =====================
+function createStars() {
+  const starsContainer = document.getElementById('stars');
+  const starCount = window.innerWidth < 700 ? 50 : 110;
+  for (let i = 0; i < starCount; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = 1 + Math.random() * 2.5;
+    s.style.width = size + 'px';
+    s.style.height = size + 'px';
+    s.style.left = Math.random() * 100 + 'vw';
+    s.style.top = Math.random() * 100 + 'vh';
+    s.style.animationDuration = (1.5 + Math.random() * 3) + 's';
+    s.style.animationDelay = Math.random() * 3 + 's';
+    starsContainer.appendChild(s);
+  }
+}
+createStars();
+
+// =====================
+// ДОСТИЖЕНИЯ
+// =====================
+const achievementsContainer = document.getElementById('achievements');
+const unlockedAchievements = new Set();
+
+const achievementsList = {
+  night_owl: { icon: '🌙', text: 'Ночной гость' },
+  clicker_10: { icon: '👆', text: '10 кликов' },
+  clicker_50: { icon: '🔥', text: '50 кликов' },
+  clicker_100: { icon: '💯', text: '100 кликов' },
+  explorer: { icon: '🔍', text: 'Исследователь' },
+  early_bird: { icon: '☀️', text: 'Ранняя пташка' },
+  first_day: { icon: '💖', text: 'Первый день' }
+};
+
+function unlockAchievement(key) {
+  if (unlockedAchievements.has(key)) return;
+  const a = achievementsList[key];
+  if (!a) return;
+  unlockedAchievements.add(key);
+
+  const el = document.createElement('div');
+  el.className = 'achievement';
+  el.innerHTML = `<span class="icon">${a.icon}</span><span>${a.text}</span>`;
+  achievementsContainer.appendChild(el);
+
+  requestAnimationFrame(() => {
+    setTimeout(() => el.classList.add('show'), 50);
+  });
+
+  setTimeout(() => {
+    el.classList.remove('show');
+    setTimeout(() => el.remove(), 600);
+  }, 5000);
+
+  if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
+}
+
+if (hour >= 23 || hour < 5) {
+  setTimeout(() => unlockAchievement('night_owl'), 3000);
+}
+if (hour >= 5 && hour < 8) {
+  setTimeout(() => unlockAchievement('early_bird'), 3000);
+}
+setTimeout(() => unlockAchievement('first_day'), 2000);
+
+// =====================
+// ЗАГРУЗКА
 // =====================
 const loader = document.getElementById('loader');
 const progressFill = document.getElementById('progressFill');
@@ -663,7 +889,7 @@ const progressInterval = setInterval(() => {
 }, 40);
 
 // =====================
-// МУЗЫКА + ПЛАСТИНКА + ТАЙМЕР
+// МУЗЫКА
 // =====================
 const audio = document.getElementById('bgMusic');
 const vinyl = document.getElementById('vinyl');
@@ -712,7 +938,7 @@ vinyl.addEventListener('click', (e) => {
 });
 
 // =====================
-// CANVAS ЧАСТИЦЫ
+// ЧАСТИЦЫ
 // =====================
 const canvas = document.getElementById('particles');
 const ctx = canvas.getContext('2d');
@@ -724,7 +950,6 @@ window.addEventListener('resize', () => {
   H = canvas.height = window.innerHeight;
 });
 
-// На мобилке — минимум частиц
 const isMobile = window.innerWidth < 700;
 const PARTICLE_COUNT = isMobile ? 20 : 60;
 const particles = [];
@@ -774,7 +999,7 @@ function animateParticles() {
 animateParticles();
 
 // =====================
-// ЛЕТАЮЩИЕ СЕРДЕЧКИ
+// СЕРДЕЧКИ
 // =====================
 const heartSymbols = ['❤️', '💖', '💕', '💗', '💓', '💘', '💝'];
 
@@ -803,7 +1028,7 @@ setInterval(createFallingHeart, isMobile ? 1000 : 500);
 for (let i = 0; i < (isMobile ? 3 : 6); i++) createFallingHeart();
 
 // =====================
-// ВЗРЫВ СЕРДЕЧЕК
+// ВЗРЫВ
 // =====================
 function explodeHearts(x, y, count = 80) {
   const actualCount = isMobile ? Math.floor(count / 3) : count;
@@ -826,7 +1051,7 @@ function explodeHearts(x, y, count = 80) {
 }
 
 // =====================
-// СЧЁТЧИК ВРЕМЕНИ ВМЕСТЕ
+// СЧЁТЧИК
 // =====================
 let togetherInterval = null;
 
@@ -842,7 +1067,6 @@ function formatTogether(ms) {
 function startTogetherCounter(startDate) {
   const el = document.getElementById('togetherValue');
   if (!el) return;
-
   function tick() {
     el.textContent = formatTogether(Date.now() - startDate);
   }
@@ -879,27 +1103,24 @@ function showFinal() {
 
   const dateStr = formatDateFull(FIXED_DATE);
 
-  const oldContainer = document.getElementById('container');
-  if (oldContainer) {
-    oldContainer.outerHTML = `
-      <div class="container final">
-        <span class="big-heart" id="bigHeart">❤️</span>
-        <h1>Я так и знал!</h1>
-        <p>Ты сделала меня счастливым 💖</p>
-        <div class="counter" id="counter">Кликов по сердцу: 0</div>
-        <div class="together">
-          <span class="label">Вместе уже</span>
-          <span class="value" id="togetherValue">0 д. 0 ч. 0 мин. 0 сек.</span>
-        </div>
-        <div class="start-date">
-          <span class="label">Наша дата</span>
-          <span id="startDateValue">${dateStr}</span>
-        </div>
-      </div>
-    `;
-  }
+  containerEl.style.display = 'flex';
+  containerEl.classList.add('final');
+  containerEl.innerHTML = `
+    <div class="greeting">${fullGreeting}</div>
+    <span class="big-heart" id="bigHeart">❤️</span>
+    <h1>Я так и знал!</h1>
+    <p>Ты сделала меня счастливым 💖</p>
+    <div class="counter" id="counter">Кликов по сердцу: 0</div>
+    <div class="together">
+      <span class="label">Вместе уже</span>
+      <span class="value" id="togetherValue">0 д. 0 ч. 0 мин. 0 сек.</span>
+    </div>
+    <div class="start-date">
+      <span class="label">Наша дата</span>
+      <span>${dateStr}</span>
+    </div>
+  `;
 
-  // Дождь сердечек — реже на мобилке
   setInterval(() => {
     explodeHearts(Math.random() * innerWidth, Math.random() * innerHeight, isMobile ? 6 : 15);
   }, isMobile ? 600 : 300);
@@ -920,8 +1141,13 @@ function showFinal() {
 
     if (navigator.vibrate) navigator.vibrate(30);
 
+    if (clicks === 10) unlockAchievement('clicker_10');
+    if (clicks === 50) unlockAchievement('clicker_50');
+    if (clicks === 100) unlockAchievement('clicker_100');
+
     if (clicks === 10) {
       secret.classList.add('show');
+      unlockAchievement('explorer');
       if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200]);
     }
   }
@@ -937,7 +1163,7 @@ function showFinal() {
   });
 }
 
-// Блокируем прокрутку двойным тапом на iOS
+// Запрет двойного тапа
 let lastTouchEnd = 0;
 document.addEventListener('touchend', function(e) {
   const now = Date.now();
