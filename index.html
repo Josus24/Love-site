@@ -32,6 +32,7 @@
     transition: background 1s ease;
     -webkit-user-select: none;
     user-select: none;
+    will-change: background;
   }
 
   body.morning { background: linear-gradient(135deg, #ffd8a8 0%, #ffb3c1 50%, #fecfef 100%); }
@@ -61,6 +62,7 @@
     pointer-events: none;
     opacity: 0;
     transition: opacity 1.5s ease;
+    will-change: opacity;
   }
 
   body.night #stars { opacity: 1; }
@@ -71,6 +73,7 @@
     border-radius: 50%;
     animation: twinkle linear infinite;
     will-change: opacity, transform;
+    transform: translateZ(0);
   }
 
   @keyframes twinkle {
@@ -88,8 +91,9 @@
     box-shadow: -25px 10px 0 0 #fff8e7;
     filter: drop-shadow(0 0 25px rgba(255, 248, 231, 0.7))
             drop-shadow(0 0 50px rgba(255, 248, 231, 0.4));
-    animation: moonGlow 4s ease-in-out infinite;
-    transform: rotate(-25deg);
+    animation: moonGlow 5s ease-in-out infinite;
+    transform: rotate(-25deg) translateZ(0);
+    will-change: filter;
   }
 
   @keyframes moonGlow {
@@ -147,6 +151,7 @@
     background: linear-gradient(90deg, #ff4d6d, #ff8fa3);
     border-radius: 10px;
     transition: width 0.1s linear;
+    will-change: width;
   }
 
   body.night .progress-fill {
@@ -158,8 +163,10 @@
     inset: 0;
     z-index: 1;
     pointer-events: none;
+    display: none;
   }
 
+  /* Падающие сердечки — теперь SVG внутри */
   .heart {
     position: fixed;
     top: -60px;
@@ -167,19 +174,24 @@
     user-select: none;
     z-index: 2;
     cursor: pointer;
-    transition: transform 0.2s ease;
+    will-change: transform;
+    transform: translateZ(0);
   }
 
-  .heart:hover { transform: scale(1.3); }
+  .heart svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 2px 4px rgba(255, 77, 109, 0.4));
+  }
 
   @keyframes fallDown {
-    0%   { transform: translateY(-60px) rotate(0deg); opacity: 0; }
+    0%   { transform: translate3d(0, -60px, 0) rotate(0deg); opacity: 0; }
     10%  { opacity: 1; }
     90%  { opacity: 1; }
-    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    100% { transform: translate3d(0, 110vh, 0) rotate(360deg); opacity: 0; }
   }
 
-  /* Карточка — компактнее по высоте, чтобы кот снизу не перекрывал */
   .container {
     position: relative;
     background: rgba(255, 255, 255, 0.25);
@@ -195,8 +207,11 @@
     justify-content: center;
     align-items: center;
     padding: 40px 45px 38px;
-    margin-bottom: 100px; /* сдвигаем карточку выше, чтобы кот был в свободной зоне */
+    margin-top: 80px;
+    margin-bottom: 200px;
     animation: glowPulse 3s ease-in-out infinite;
+    transform: translateZ(0);
+    will-change: box-shadow;
   }
 
   body.night .container {
@@ -234,7 +249,6 @@
     }
   }
 
-  /* Приветствие — с отступом, чтобы не наезжало на плеер */
   .greeting {
     font-family: 'Pacifico', cursive;
     font-size: 20px;
@@ -250,17 +264,25 @@
     text-shadow: 0 2px 10px rgba(180, 150, 255, 0.6);
   }
 
+  /* Взрывные сердечки — тоже SVG */
   .burst-heart {
     position: fixed;
     pointer-events: none;
     user-select: none;
     z-index: 99999;
     will-change: transform, opacity;
+    transform: translateZ(0);
+  }
+
+  .burst-heart svg {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
 
   @keyframes burst {
-    0%   { transform: translate(0,0) scale(0.3); opacity: 1; }
-    100% { transform: translate(var(--dx), var(--dy)) scale(1.6); opacity: 0; }
+    0%   { transform: translate3d(0, 0, 0) scale(0.3); opacity: 1; }
+    100% { transform: translate3d(var(--dx), var(--dy), 0) scale(1.6); opacity: 0; }
   }
 
   .final {
@@ -316,14 +338,16 @@
     margin-bottom: 16px;
     cursor: pointer;
     user-select: none;
-    animation: pulse 1.2s ease-in-out infinite;
+    animation: pulse 1.5s ease-in-out infinite;
     filter: drop-shadow(0 8px 24px rgba(255, 77, 109, 0.5));
     -webkit-tap-highlight-color: transparent;
+    will-change: transform;
+    transform: translateZ(0);
   }
 
   @keyframes pulse {
     0%, 100% { transform: scale(1); }
-    50%      { transform: scale(1.12); }
+    50%      { transform: scale(1.1); }
   }
 
   @keyframes appear {
@@ -442,14 +466,15 @@
     gap: 8px;
     letter-spacing: 0.3px;
     opacity: 0;
-    transform: translateX(-120%);
+    transform: translateX(-120%) translateZ(0);
     transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     line-height: 1.2;
+    will-change: opacity, transform;
   }
 
   .achievement.show {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(0) translateZ(0);
   }
 
   .achievement .icon {
@@ -457,18 +482,17 @@
     flex-shrink: 0;
   }
 
-  /* Кот — уменьшен, чтобы не закрывал карточку */
   .dancing-cat {
     position: fixed;
     bottom: 0;
     left: 50%;
-    transform: translateX(-50%);
-    height: 160px;
+    transform: translateX(-50%) translateZ(0);
+    height: 170px;
     z-index: 5;
     pointer-events: none;
     display: none;
     filter: drop-shadow(0 10px 24px rgba(255, 77, 109, 0.4));
-    animation: catDance 0.8s ease-in-out infinite;
+    animation: catDance 1s ease-in-out infinite;
     will-change: transform;
   }
 
@@ -476,21 +500,21 @@
 
   @keyframes catDance {
     0%, 100% { transform: translateX(-50%) translateY(0) rotate(-3deg); }
-    50%      { transform: translateX(-50%) translateY(-12px) rotate(3deg); }
+    50%      { transform: translateX(-50%) translateY(-10px) rotate(3deg); }
   }
 
-  /* Плеер — фиксирован, не мешает */
   .player {
     position: fixed;
     top: 15px;
     left: 50%;
-    transform: translateX(-50%);
-    z-index: 20;
+    transform: translateX(-50%) translateZ(0);
+    z-index: 50;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 6px;
     max-width: 90vw;
+    pointer-events: auto;
   }
 
   .vinyl {
@@ -499,37 +523,39 @@
     object-fit: contain;
     cursor: pointer;
     filter: drop-shadow(0 8px 24px rgba(255, 77, 109, 0.5));
-    animation: spinVinyl 6s linear infinite;
+    animation: spinVinyl 8s linear infinite;
     animation-play-state: paused;
     transition: transform 0.2s ease;
     -webkit-tap-highlight-color: transparent;
     will-change: transform;
+    transform: translateZ(0);
   }
 
-  .vinyl:hover { transform: scale(1.08); }
+  .vinyl:hover { transform: scale(1.08) translateZ(0); }
   .vinyl.playing { animation-play-state: running; }
 
   @keyframes spinVinyl {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
+    from { transform: rotate(0deg) translateZ(0); }
+    to   { transform: rotate(360deg) translateZ(0); }
   }
 
   .track-info {
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.9);
     color: #ff4d6d;
     font-family: 'Segoe UI', Arial, sans-serif;
     font-size: 12px;
     font-weight: 700;
-    padding: 5px 14px;
+    padding: 6px 16px;
     border-radius: 50px;
     text-align: center;
     white-space: nowrap;
-    box-shadow: 0 6px 18px rgba(255, 77, 109, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    box-shadow: 0 6px 18px rgba(255, 77, 109, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
     line-height: 1.3;
     max-width: 90vw;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin-top: 4px;
   }
 
   .track-info .time {
@@ -541,14 +567,14 @@
   }
 
   body.night .track-info {
-    background: rgba(180, 150, 255, 0.25);
-    color: #e0d4ff;
-    box-shadow: 0 6px 18px rgba(180, 150, 255, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    background: rgba(180, 150, 255, 0.35);
+    color: #f0e6ff;
+    box-shadow: 0 6px 18px rgba(180, 150, 255, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
   }
 
   body.night .track-info .time {
-    color: #d4b5ff;
+    color: #e0d4ff;
   }
 
   .secret {
@@ -602,15 +628,35 @@
     cursor: pointer;
   }
 
-  /* ============================================
-     МОБИЛЬНАЯ ВЕРСИЯ
-     ============================================ */
   @media (max-width: 700px) {
     body {
       align-items: center;
       justify-content: center;
       padding-top: calc(env(safe-area-inset-top) + 75px);
       padding-bottom: calc(env(safe-area-inset-bottom) + 95px);
+    }
+
+    .container {
+      width: 90vw;
+      padding: 22px 16px;
+      border-radius: 22px;
+      margin: 0;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    body.night .container {
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .start-date {
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .secret {
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
     }
 
     #loader h2 { font-size: 22px; margin-bottom: 20px; }
@@ -622,19 +668,13 @@
       top: 5vh;
       right: 8vw;
       box-shadow: -15px 6px 0 0 #fff8e7;
+      filter: drop-shadow(0 0 15px rgba(255, 248, 231, 0.6));
     }
 
     .player { top: calc(env(safe-area-inset-top) + 8px); gap: 4px; }
     .vinyl { width: 52px; height: 52px; }
     .track-info { font-size: 10px; padding: 4px 10px; max-width: 78vw; }
     .track-info .time { font-size: 9px; margin-top: 1px; }
-
-    .container {
-      width: 90vw;
-      padding: 22px 16px;
-      border-radius: 22px;
-      margin: 0;
-    }
 
     .greeting { font-size: 14px; margin-bottom: 12px; }
     .final h1 { font-size: 20px; margin-bottom: 8px; -webkit-text-stroke: 1px rgba(255, 77, 109, 0.4); text-shadow: 0 2px 0 #ff4d6d, 0 4px 14px rgba(255, 77, 109, 0.6); }
@@ -655,7 +695,7 @@
     .secret p { font-size: 17px; }
     .secret .close-btn { padding: 12px 30px; font-size: 16px; margin-top: 22px; }
 
-    .dancing-cat { height: 85px; }
+    .dancing-cat { height: 90px; }
 
     .love-gif { height: 1.1em; margin-left: 6px; }
 
@@ -667,6 +707,26 @@
     }
     .achievement { font-size: 10px; padding: 5px 10px; }
     .achievement .icon { font-size: 13px; }
+
+    .container {
+      animation: none;
+      box-shadow: 0 15px 40px rgba(255, 77, 109, 0.35),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+    body.night .container {
+      animation: none;
+      box-shadow: 0 15px 40px rgba(180, 150, 255, 0.35),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+
+    body.shake { animation: screenShakeMobile 0.35s ease; }
+  }
+
+  @keyframes screenShakeMobile {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(-4px, -2px); }
+    50% { transform: translate(4px, 2px); }
+    75% { transform: translate(-3px, 3px); }
   }
 
   @media (max-width: 380px) {
@@ -686,7 +746,7 @@
     .start-date { font-size: 9px; padding: 4px 10px; }
     .vinyl { width: 48px; height: 48px; }
     .track-info { font-size: 9px; }
-    .dancing-cat { height: 70px; }
+    .dancing-cat { height: 75px; }
   }
 
   @media (max-height: 700px) and (max-width: 700px) {
@@ -700,7 +760,7 @@
     .final .big-heart { font-size: 48px; }
     .final h1 { font-size: 18px; }
     .final p { font-size: 11px; }
-    .dancing-cat { height: 68px; }
+    .dancing-cat { height: 70px; }
   }
 
   @media (max-height: 500px) and (orientation: landscape) {
@@ -724,7 +784,7 @@
     .greeting { font-size: 11px; margin-bottom: 6px; }
     .final h1 { font-size: 16px; margin-bottom: 6px; }
     .final p { font-size: 10px; margin-bottom: 6px; }
-    .container { padding: 14px 18px; max-width: 70vw; }
+    .container { padding: 14px 18px; max-width: 70vw; margin: 0; }
     .final .big-heart { font-size: 38px; margin-bottom: 6px; }
     .counter, .together, .start-date { font-size: 9px; padding: 4px 10px; }
     .together .value { font-size: 9px; }
@@ -746,8 +806,6 @@
     <div class="progress-fill" id="progressFill"></div>
   </div>
 </div>
-
-<canvas id="particles"></canvas>
 
 <div class="player">
   <img src="plastinka.png" alt="Пластинка" class="vinyl" id="vinyl">
@@ -771,6 +829,11 @@
 </div>
 
 <script>
+// =====================
+// ОПРЕДЕЛЕНИЕ МОБИЛЬНОГО УСТРОЙСТВА
+// =====================
+const isMobile = window.innerWidth < 700;
+
 // =====================
 // ФИКСИРОВАННАЯ ДАТА
 // =====================
@@ -810,14 +873,24 @@ const fullGreeting = `${greetingText}, ${name} ${emoji}`;
 // =====================
 // ВСЕГДА "КИСА" С ГИФКОЙ
 // =====================
-const loveTextHTML = `Люблю тебя, киса <img src="kota.gif" alt="kota" class="love-gif">`;
+const loveTextHTML = `Люблю тебя, киса <img src="kota.gif" alt="kota" class="love-gif" loading="lazy">`;
+
+// =====================
+// ОБЩИЙ ФЛАГ ПАУЗЫ
+// =====================
+let isPageVisible = !document.hidden;
+document.addEventListener('visibilitychange', () => {
+  isPageVisible = !document.hidden;
+});
 
 // =====================
 // ЗВЁЗДЫ
 // =====================
 function createStars() {
   const starsContainer = document.getElementById('stars');
-  const starCount = window.innerWidth < 700 ? 45 : 110;
+  const starCount = isMobile ? 25 : 110;
+
+  const fragment = document.createDocumentFragment();
   for (let i = 0; i < starCount; i++) {
     const s = document.createElement('div');
     s.className = 'star';
@@ -829,8 +902,9 @@ function createStars() {
     s.style.animationDuration = (1.5 + Math.random() * 3) + 's';
     s.style.animationDelay = Math.random() * 3 + 's';
     s.style.opacity = 0.3 + Math.random() * 0.5;
-    starsContainer.appendChild(s);
+    fragment.appendChild(s);
   }
+  starsContainer.appendChild(fragment);
 }
 createStars();
 
@@ -916,7 +990,12 @@ function formatTime(sec) {
   return m + ':' + (s < 10 ? '0' : '') + s;
 }
 
+let lastTimeUpdate = 0;
+const TIME_UPDATE_INTERVAL = isMobile ? 1500 : 0;
 function updateTime() {
+  const now = Date.now();
+  if (now - lastTimeUpdate < TIME_UPDATE_INTERVAL) return;
+  lastTimeUpdate = now;
   trackTime.textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
 }
 audio.addEventListener('timeupdate', updateTime);
@@ -952,116 +1031,117 @@ vinyl.addEventListener('click', (e) => {
 });
 
 // =====================
-// ЧАСТИЦЫ
+// SVG-СЕРДЕЧКИ
 // =====================
-const canvas = document.getElementById('particles');
-const ctx = canvas.getContext('2d');
-let W = canvas.width = window.innerWidth;
-let H = canvas.height = window.innerHeight;
-
-window.addEventListener('resize', () => {
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-});
-
-const isMobile = window.innerWidth < 700;
-const PARTICLE_COUNT = isMobile ? 18 : 60;
-const particles = [];
-
-class Particle {
-  constructor() { this.reset(); }
-  reset() {
-    this.x = Math.random() * W;
-    this.y = Math.random() * H + H;
-    this.size = 3 + Math.random() * 6;
-    this.speedY = -(0.3 + Math.random() * 0.8);
-    this.speedX = (Math.random() - 0.5) * 0.3;
-    this.opacity = 0.15 + Math.random() * 0.35;
-    this.color = `rgba(255, ${80 + Math.random() * 80}, ${120 + Math.random() * 80}, `;
-  }
-  update() {
-    this.x += this.speedX;
-    this.y += this.speedY;
-    if (this.y < -20) {
-      this.x = Math.random() * W;
-      this.y = H + 20;
-    }
-  }
-  draw() {
-    const s = this.size;
-    ctx.save();
-    ctx.translate(this.x, this.y);
-    ctx.beginPath();
-    ctx.moveTo(0, s * 0.4);
-    ctx.bezierCurveTo(0, 0, -s, 0, -s, s * 0.4);
-    ctx.bezierCurveTo(-s, s * 0.9, 0, s * 1.3, 0, s * 1.6);
-    ctx.bezierCurveTo(0, s * 1.3, s, s * 0.9, s, s * 0.4);
-    ctx.bezierCurveTo(s, 0, 0, 0, 0, s * 0.4);
-    ctx.fillStyle = this.color + this.opacity + ')';
-    ctx.fill();
-    ctx.restore();
-  }
+function heartSVG(fill, stroke) {
+  return `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 28 C 4 18, 4 8, 10 6 C 13 5, 15 7, 16 9 C 17 7, 19 5, 22 6 C 28 8, 28 18, 16 28 Z" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/></svg>`;
 }
 
-for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
-
-function animateParticles() {
-  ctx.clearRect(0, 0, W, H);
-  particles.forEach(p => { p.update(); p.draw(); });
-  requestAnimationFrame(animateParticles);
-}
-animateParticles();
+const heartSymbols = [
+  heartSVG('#ff4d6d', '#ff8fa3'),
+  heartSVG('#ff6b8a', '#ffb3c1'),
+  heartSVG('#ff8fa3', '#ffc2d1'),
+  heartSVG('#ffb3c1', '#ffd6e0'),
+  heartSVG('#ff4d6d', '#ff8fa3')
+];
 
 // =====================
-// СЕРДЕЧКИ
+// ПАДАЮЩИЕ СЕРДЕЧКИ
 // =====================
-const heartSymbols = ['❤️', '💖', '💕', '💗', '💓', '💘', '💝'];
+const heartPool = [];
+const MAX_HEARTS = isMobile ? 4 : 8;
 
-function createFallingHeart() {
-  const h = document.createElement('div');
-  h.className = 'heart';
-  h.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+function spawnHeart() {
+  if (document.querySelectorAll('.heart').length >= MAX_HEARTS) return;
+
+  let h;
+  if (heartPool.length > 0) {
+    h = heartPool.pop();
+  } else {
+    h = document.createElement('div');
+    h.className = 'heart';
+  }
+  h.innerHTML = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+  const size = 20 + Math.random() * 25;
   h.style.left = Math.random() * 100 + 'vw';
-  h.style.fontSize = (16 + Math.random() * 26) + 'px';
-  const dur = 5 + Math.random() * 5;
+  h.style.width = size + 'px';
+  h.style.height = size + 'px';
+  const dur = 6 + Math.random() * 5;
   h.style.animation = `fallDown ${dur}s linear`;
-  h.style.animationDelay = Math.random() * 2 + 's';
+  h.style.animationDelay = '0s';
 
-  h.addEventListener('click', (e) => {
+  h.onclick = (e) => {
     e.stopPropagation();
     const r = h.getBoundingClientRect();
-    explodeHearts(r.left + r.width / 2, r.top + r.height / 2, 15);
+    explodeHearts(r.left + r.width / 2, r.top + r.height / 2, 6);
     h.remove();
+    heartPool.push(h);
     if (navigator.vibrate) navigator.vibrate(30);
-  });
+  };
 
-  document.body.appendChild(h);
-  setTimeout(() => h.remove(), (dur + 3) * 1000);
+  if (!h.parentNode) document.body.appendChild(h);
+
+  setTimeout(() => {
+    h.remove();
+    if (heartPool.length < 20) heartPool.push(h);
+  }, (dur + 1) * 1000);
 }
-setInterval(createFallingHeart, isMobile ? 1200 : 500);
-for (let i = 0; i < (isMobile ? 3 : 6); i++) createFallingHeart();
+
+let heartInterval = null;
+function startHeartRain() {
+  if (heartInterval) return;
+  const delay = isMobile ? 2000 : 800;
+  heartInterval = setInterval(() => {
+    if (!isPageVisible) return;
+    spawnHeart();
+  }, delay);
+  const startCount = isMobile ? 2 : 5;
+  for (let i = 0; i < startCount; i++) setTimeout(spawnHeart, i * 400);
+}
+startHeartRain();
 
 // =====================
-// ВЗРЫВ
+// ВЗРЫВ СЕРДЕЧЕК
 // =====================
-function explodeHearts(x, y, count = 80) {
-  const actualCount = isMobile ? Math.floor(count / 3) : count;
+let currentBursts = 0;
+const MAX_BURSTS = isMobile ? 60 : 200;
+
+function explodeHearts(x, y, count = 30) {
+  if (currentBursts >= MAX_BURSTS) return;
+  const available = MAX_BURSTS - currentBursts;
+  const actualCount = Math.min(count, available);
+
+  const fragment = document.createDocumentFragment();
+
   for (let i = 0; i < actualCount; i++) {
     const h = document.createElement('div');
     h.className = 'burst-heart';
-    h.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+    h.innerHTML = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+    const size = 18 + Math.random() * 20;
     h.style.left = x + 'px';
     h.style.top = y + 'px';
-    h.style.fontSize = (18 + Math.random() * 30) + 'px';
+    h.style.width = size + 'px';
+    h.style.height = size + 'px';
     const angle = Math.random() * Math.PI * 2;
-    const dist = 150 + Math.random() * 350;
+    const dist = 120 + Math.random() * 320;
     h.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
     h.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
-    const dur = 1 + Math.random() * 1.5;
+    const dur = 1 + Math.random() * 1.2;
     h.style.animation = `burst ${dur}s cubic-bezier(0.2, 0.8, 0.3, 1) forwards`;
-    document.body.appendChild(h);
-    setTimeout(() => h.remove(), (dur + 0.5) * 1000);
+    fragment.appendChild(h);
   }
+  document.body.appendChild(fragment);
+  currentBursts += actualCount;
+
+  setTimeout(() => {
+    currentBursts -= actualCount;
+  }, 2500);
+
+  setTimeout(() => {
+    document.querySelectorAll('.burst-heart').forEach((el, idx) => {
+      if (idx < actualCount) el.remove();
+    });
+  }, 2600);
 }
 
 // =====================
@@ -1082,6 +1162,7 @@ function startTogetherCounter(startDate) {
   const el = document.getElementById('togetherValue');
   if (!el) return;
   function tick() {
+    if (!isPageVisible) return;
     el.textContent = formatTogether(Date.now() - startDate);
   }
   tick();
@@ -1135,9 +1216,11 @@ function showFinal() {
     </div>
   `;
 
+  const rainDelay = isMobile ? 2000 : 1200;
   setInterval(() => {
-    explodeHearts(Math.random() * innerWidth, Math.random() * innerHeight, isMobile ? 5 : 15);
-  }, isMobile ? 800 : 300);
+    if (!isPageVisible) return;
+    explodeHearts(Math.random() * innerWidth, Math.random() * innerHeight, isMobile ? 3 : 6);
+  }, rainDelay);
 
   startTogetherCounter(FIXED_DATE);
 
@@ -1151,7 +1234,7 @@ function showFinal() {
     counter.textContent = 'Кликов по сердцу: ' + clicks;
 
     const r = bigHeart.getBoundingClientRect();
-    explodeHearts(r.left + r.width / 2, r.top + r.height / 2, isMobile ? 12 : 30);
+    explodeHearts(r.left + r.width / 2, r.top + r.height / 2, isMobile ? 8 : 20);
 
     if (navigator.vibrate) navigator.vibrate(30);
 
